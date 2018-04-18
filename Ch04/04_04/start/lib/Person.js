@@ -6,6 +6,10 @@ class Person extends EventEmitter {
         super(options)
         this.name = name
     }
+
+    speak(said) {
+        console.log(`${this.name}: ${said}`)
+    }
 }
 
 module.exports = Person
