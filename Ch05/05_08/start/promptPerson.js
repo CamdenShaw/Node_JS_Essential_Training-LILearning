@@ -1,34 +1,39 @@
-var readline = require('readline');
-var rl = readline.createInterface(process.stdin, process.stdout);
-var fs = require("fs");
+const readline = require("readline")
+const fs = require("fs")
 
-var realPerson = {
-	name: '',
-	sayings: []
-};
+let rl = readline.createInterface(process.stdin, process.stdout)
 
+let realPerson = {
+    name: "",
+    sayings: []
+}
 
-rl.question("What is the name of a real person? ", function(answer) {
+rl.question("What is the name of a real person? ", answer => {
+    realPerson.name = answer
 
-	realPerson.name = answer;
+    let stream = fs.createWriteStream(`${realPerson.name}.md`)
 
-	//
-	//	TODO: Use a Writable Stream
-	//
+    stream.write(`${realPerson.name}\n===============\n\n`)
 
+    rl.setPrompt(`What would ${realPerson.name} say? `)
 
-		//
-		//TODO: Write to the stream
-		//
-		
-	});
+    rl.prompt()
 
-});
+    rl.on("line", saying => {
+        if (saying.toLowerCase().trim() === "exit") {
+            stream.close()
+            rl.close()
+        }
 
+        realPerson.sayings.push(saying.trim())
 
-rl.on('close', function() {
+        stream.write(`* ${saying.trim()} \n`)
+        rl.setPrompt(`What else would ${realPerson.name} say? (type 'exit' to leave) `)
+        rl.prompt()
+    })
+})
 
-	console.log("%s is a real person that says %j", realPerson.name, realPerson.sayings);
-	process.exit();
-
-});
+rl.on("close", () => {
+    console.log("%s is a real person that says %j", realPerson.name, realPerson.sayings)
+    process.exit()
+})
