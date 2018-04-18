@@ -1,19 +1,19 @@
-var EventEmitter = require('events').EventEmitter;
-var util = require('util');
+const EventEmitter = require("events").EventEmitter
+// var util = require('util');
 
-var Person = function(name) {
-	this.name = name;
-};
+class Person extends EventEmitter {
+    constructor(name, options) {
+        super(options)
+        this.name = name
+    }
+}
 
-util.inherits(Person, EventEmitter);
+// util.inherits(Person, EventEmitter);
 
-var ben = new Person("Ben Franklin");
+const ben = new Person("Ben Franklin")
 
-ben.on('speak', function(said) {
+ben.on("speak", function(said) {
+    console.log(`${this.name}: ${said}`)
+})
 
-	console.log(`${this.name}: ${said}`);
-
-});
-
-
-ben.emit('speak', "You may delay, but time will not.");
+ben.emit("speak", "You may delay, but time will not.")
